@@ -8,10 +8,10 @@ The Chatbot Platform is designed as a monolithic-repository application with a c
 
 ```mermaid
 graph TD
-    User[User Client] -->|HTTP/HTTPS| FE[Frontend (React/Vite)]
-    FE -->|REST API| BE[Backend API (Node.js/Express)]
-    BE -->|Query| DB[(Supabase / PostgreSQL)]
-    BE -->|Inference| AI[AI Service (OpenAI/Gemini)]
+    User[User Client] -->|HTTP/HTTPS| FE["Frontend (React/Vite)"]
+    FE -->|REST API| BE["Backend API (Node.js/Express)"]
+    BE -->|Query| DB[("Supabase / PostgreSQL")]
+    BE -->|Inference| AI["AI Service (OpenAI/Gemini)"]
     BE -->|Auth| Auth[JWT Authentication]
 ```
 
