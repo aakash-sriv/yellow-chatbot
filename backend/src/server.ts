@@ -1,5 +1,5 @@
 import express from 'express';
-import type { Application } from 'express';import cors from 'cors';
+import type { Application } from 'express'; import cors from 'cors';
 import dotenv from 'dotenv';
 import { errorHandler } from './middleware/errorHandler.js';
 import { apiLimiter } from './middleware/rateLimiter.js';
@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 5000;
 
 // CORS Configuration - ALLOW FRONTEND
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001' , 'https://yellow-chatbot-orpin.vercel.app/'], // React default ports
+  origin: ['http://localhost:3000', 'http://localhost:3001', 'https://yellow-chatbot-orpin.vercel.app'], // React default ports
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
