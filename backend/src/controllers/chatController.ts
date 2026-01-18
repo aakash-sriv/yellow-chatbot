@@ -143,13 +143,23 @@ export const sendMessage = async (
       (p) => p.role === 'system'
     )?.content;
 
+    // Get other prompts (user/assistant) to seed the conversation
+    const contextPrompts = chat.project.prompts
+      .filter(p => p.role !== 'system')
+      .map(p => ({
+        role: p.role as 'user' | 'assistant',
+        content: p.content
+      }));
+
     // Format messages with proper type assertion
-    const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = 
-      chat.messages.map((m) => ({
+    const messages: Array<{ role: 'system' | 'user' | 'assistant'; content: string }> = [
+      ...contextPrompts, // Inject context prompts first
+      ...chat.messages.map((m) => ({
         role: m.role as 'system' | 'user' | 'assistant',
         content: m.content,
-      }));
-    
+      }))
+    ];
+
     messages.push({ role: 'user', content });
 
     // Get AI response

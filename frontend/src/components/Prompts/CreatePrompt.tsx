@@ -25,7 +25,7 @@ export const CreatePrompt: React.FC<CreatePromptProps> = ({
     setLoading(true);
 
     try {
-      await promptAPI.create({ ...formData, projectId });
+      await promptAPI.create({ ...formData, role: 'system', projectId });
       toast.success('Prompt created successfully!');
       onSuccess();
       onClose();
@@ -40,7 +40,7 @@ export const CreatePrompt: React.FC<CreatePromptProps> = ({
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className=" rounded-2xl shadow-2xl w-full max-w-2xl p-6">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-2xl font-bold ">Create System Prompt</h2>
+          <h2 className="text-2xl font-bold ">Create Prompt</h2>
           <button
             onClick={onClose}
             className=" hover: transition"
@@ -50,20 +50,7 @@ export const CreatePrompt: React.FC<CreatePromptProps> = ({
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium  mb-2">
-              Role
-            </label>
-            <select
-              value={formData.role}
-              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-              className="w-full px-4 py-2 border  rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="system">System</option>
-              <option value="user">User</option>
-              <option value="assistant">Assistant</option>
-            </select>
-          </div>
+          {/* Role selection removed as per user request */}
 
           <div>
             <label className="block text-sm font-medium  mb-2">

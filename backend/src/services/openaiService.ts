@@ -14,25 +14,48 @@ export const sendChatMessage = async (
   systemPrompt?: string
 ): Promise<string> => {
   try {
-    // Create model with or without system instruction
-    const model = systemPrompt
-      ? genAI.getGenerativeModel({
-        model: "gemini-2.5-flash",
+    // Create model (globally switched to 2.0-flash-lite)
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.0-flash-lite",
+      ...(systemPrompt && { systemInstruction: systemPrompt }),
+    });
 
-        systemInstruction: systemPrompt,
-      })
-      : genAI.getGenerativeModel({
-        model: "gemini-1.5-flash",
+    console.log("--- SEND CHAT MESSAGE ---");
+    console.log("System Prompt:", systemPrompt);
+    console.log("Messages count:", messages.length);
 
-      });
-
-    // Convert messages to Gemini format
-    const history = messages
+    // Convert messages to Gemini format with sanitization (merge consecutive same-role messages)
+    const rawHistory = messages
       .filter((m) => m.role !== "system")
       .map((m) => ({
         role: m.role === "assistant" ? "model" : "user",
         parts: [{ text: m.content }],
       }));
+
+    const history: { role: string; parts: { text: string }[] }[] = [];
+
+    for (const msg of rawHistory) {
+      const lastMsg = history[history.length - 1];
+      if (lastMsg && lastMsg.role === msg.role) {
+        // Merge with previous message
+        if (lastMsg.parts[0] && msg.parts[0]) {
+          lastMsg.parts[0].text += "\n\n" + msg.parts[0].text;
+        }
+      } else {
+        history.push(msg);
+      }
+    }
+
+    // Ensure history starts with user (Gemini requirement)
+    const firstMsg = history[0];
+    if (firstMsg && firstMsg.role === 'model') {
+      history.unshift({
+        role: 'user',
+        parts: [{ text: 'Please follow these instructions:' }] // Better dummy message
+      });
+    }
+
+    console.log("Sanitized history length:", history.length);
 
     // Handle empty messages array
     if (history.length === 0) {
@@ -46,12 +69,16 @@ export const sendChatMessage = async (
     // Get the last message safely
     const lastMessage = history[history.length - 1];
 
+    console.log("Sending message:", lastMessage?.parts?.[0]?.text);
+
     if (!lastMessage || !lastMessage.parts[0]?.text) {
+      console.error("Invalid last message structure:", JSON.stringify(lastMessage));
       throw new Error("Invalid last message");
     }
 
-    const result = await chat.sendMessage(lastMessage.parts[0].text);
+    const result = await chat.sendMessage(lastMessage.parts[0].text!);
     const text = result.response.text();
+    console.log("Gemini response success");
 
     if (!text) {
       throw new Error("Empty response from Gemini");
@@ -60,7 +87,17 @@ export const sendChatMessage = async (
     return text;
   } catch (error: any) {
     console.error("🔥 GEMINI ERROR:", error.message);
-    throw new Error("Failed to get AI response");
+    console.error("Full error:", JSON.stringify(error, null, 2));
+
+    // Log to file for debugging
+    try {
+      const fs = await import('fs');
+      fs.appendFileSync('gemini-error.log', `\n[${new Date().toISOString()}] ERROR: ${error.message}\nSTACK: ${error.stack}\n`);
+    } catch (e) {
+      console.error("Failed to write log file");
+    }
+
+    throw new Error("Failed to get AI response: " + error.message);
   }
 };
 

@@ -70,12 +70,9 @@ export const PromptList: React.FC<PromptListProps> = ({ projectId }) => {
               className="border  rounded-lg p-4 hover:border-[#87BCAB] transition"
             >
               <div className="flex justify-between items-start mb-2">
-                <span className="inline-block px-2 py-1 bg-blue-100  text-xs font-semibold rounded">
-                  {prompt.role.toUpperCase()}
-                </span>
                 <button
                   onClick={() => handleDelete(prompt.id)}
-                  className="text-red-500 hover:text-red-700 transition"
+                  className="text-red-500 hover:text-red-700 transition ml-auto"
                 >
                   <Trash2 size={16} />
                 </button>
