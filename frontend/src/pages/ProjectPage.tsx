@@ -4,6 +4,7 @@ import { Navbar } from '../components/Layout/Navbar';
 import { PromptList } from '../components/Prompts/PromptList';
 import { ChatList } from '../components/Chat/ChatList';
 import { ChatInterface } from '../components/Chat/ChatInterface';
+import { FileList } from '../components/Files/FileList'; // ADD THIS
 import { projectAPI } from '../services/api';
 import type { Project } from '../types';
 import { ArrowLeft } from 'lucide-react';
@@ -46,24 +47,29 @@ export const ProjectPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen  flex flex-col">
+    <div className="min-h-screen flex flex-col">
       <Navbar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 flex flex-col">
         <div className="mb-6 flex items-center space-x-4">
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center space-x-2  hover: transition"
+            className="flex items-center space-x-2 hover:transition"
           >
             <ArrowLeft size={20} />
             <span>Back to Dashboard</span>
           </button>
-          <div className="border-l  h-6"></div>
-          <h1 className="text-3xl font-bold ">{project.name}</h1>
+          <div className="border-l h-6"></div>
+          <h1 className="text-3xl font-bold">{project.name}</h1>
         </div>
 
         <div className="mb-6">
           <PromptList projectId={project.id} />
+        </div>
+
+        {/* ADD THIS FILE LIST SECTION */}
+        <div className="mb-6">
+          <FileList projectId={project.id} />
         </div>
 
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6 min-h-[600px] w-full">
@@ -72,7 +78,7 @@ export const ProjectPage: React.FC = () => {
               projectId={project.id}
               selectedChatId={selectedChatId}
               onSelectChat={setSelectedChatId}
-              onChatCreated={() => { }}
+              onChatCreated={() => {}}
             />
           </div>
 
@@ -80,7 +86,7 @@ export const ProjectPage: React.FC = () => {
             {selectedChatId ? (
               <ChatInterface chatId={selectedChatId} />
             ) : (
-              <div className="flex items-center justify-center h-full ">
+              <div className="flex items-center justify-center h-full">
                 <div className="text-center">
                   <p className="text-xl mb-2">No chat selected</p>
                   <p className="text-sm">Create or select a chat to start messaging</p>
