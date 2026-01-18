@@ -15,6 +15,9 @@ dotenv.config();
 const app: Application = express();
 const PORT = process.env.PORT || 5000;
 
+// Trust proxy for Render deployment (required for rate limiting)
+app.set('trust proxy', 1);
+
 // CORS Configuration - ALLOW FRONTEND
 app.use(cors({
   origin: ['http://localhost:3000', 'http://localhost:3001', 'https://yellow-chatbot-orpin.vercel.app'], // React default ports
