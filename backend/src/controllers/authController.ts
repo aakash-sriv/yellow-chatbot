@@ -23,7 +23,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    const hashedPassword = await bcrypt.hash(password, 12);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
       data: {

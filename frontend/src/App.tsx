@@ -8,10 +8,13 @@ import { Dashboard } from './pages/Dashboard';
 import { ProjectPage } from './pages/ProjectPage';
 import { ProtectedRoute } from './components/Auth/ProtectedRoute';
 
+import { KeepAlive } from './components/KeepAlive';
+
 function App() {
   return (
     <BrowserRouter>
       <Toaster position="top-right" />
+      <KeepAlive />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
