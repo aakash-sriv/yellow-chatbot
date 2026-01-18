@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Delius&family=Playwrite+DE+Grund:wght@100..400&display=swap');
+@import "tailwindcss";
+
+@layer base {
+
+  html,
+  body,
+  #root {
+    background-color: #333932;
+    color: #948979;
+    font-family: "Playwrite DE Grund", cursive;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    width: 100%;
+  }
+
+  /* Force override for any other elements */
+  div,
+  nav,
+  section,
+  main,
+  header,
+  footer,
+  button,
+  input,
+  textarea {
+    border-color: #948979;
+    color: #ade7b0;
+  }
+}
+
+/* Utilities */
+@layer utilities {
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
