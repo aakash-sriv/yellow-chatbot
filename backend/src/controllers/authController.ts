@@ -40,7 +40,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     });
 
     const token = jwt.sign(
-      { userId: user.id }, 
+      { userId: user.id },
       process.env.JWT_SECRET as string,
       { expiresIn: '7d' }
     );
@@ -83,7 +83,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 
     const token = jwt.sign(
-      { userId: user.id }, 
+      { userId: user.id },
       process.env.JWT_SECRET as string,
       { expiresIn: '7d' }
     );
@@ -99,7 +99,10 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: 'Login failed' });
+    res.status(500).json({
+      error: 'Login failed',
+      details: error instanceof Error ? error.message : String(error)
+    });
   }
 };
 
