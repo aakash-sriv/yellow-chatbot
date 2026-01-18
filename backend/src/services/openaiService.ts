@@ -14,9 +14,9 @@ export const sendChatMessage = async (
   systemPrompt?: string
 ): Promise<string> => {
   try {
-    // Create model (globally switched to 2.0-flash-lite)
+    // Create model (globally switched to 2.5-flash-lite as requested)
     const model = genAI.getGenerativeModel({
-      model: "gemini-2.0-flash-lite",
+      model: "gemini-2.5-flash-lite",
       ...(systemPrompt && { systemInstruction: systemPrompt }),
     });
 
