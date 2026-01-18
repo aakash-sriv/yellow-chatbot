@@ -13,7 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 // CORS Configuration - ALLOW FRONTEND
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:3001'], // React default ports
+    origin: ['http://localhost:3000', 'http://localhost:3001', 'https://yellow-chatbot-orpin.vercel.app/'], // React default ports
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
