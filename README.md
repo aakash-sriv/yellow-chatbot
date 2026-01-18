@@ -9,7 +9,7 @@ A robust, scalable, and modern Chatbot Platform designed for managing AI agents,
 -   **Prompt Engineering**: Store, Version, and associate prompts with projects.
 -   **Real-time Chat Interface**: Interact with your agents using a modern, responsive chat UI.
 -   **AI Integration**: Integrated with OpenAI/Gemini for intelligent responses.
--   **File Upload Support**: comprehensive support for uploading files to agents for context-aware conversations (OpenAI Files API integration).
+-   **File Upload Support**: Upload images, PDFs, audio, and video files (up to 20MB) to projects using Gemini Files API integration.
 -   **Responsive Design**: Fully optimized for desktop and mobile experience.
 
 ## Tech Stack
