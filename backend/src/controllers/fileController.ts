@@ -1,21 +1,64 @@
 import type { Response } from 'express';
 import type { AuthRequest } from '../middleware/auth.js';
 import prisma from '../config/database.js';
+import { uploadFileToGemini } from '../services/openaiService.js';
 
 export const uploadFile = async (
   req: AuthRequest,
   res: Response
 ): Promise<void> => {
   try {
-    // File upload logic would go here
-    // For now, returning a placeholder
-    res.status(501).json({ 
-      error: 'File upload not implemented yet',
-      message: 'This feature requires AWS S3 or similar storage setup'
+    if (!req.file) {
+      res.status(400).json({ error: 'No file provided' });
+      return;
+    }
+
+    const { projectId } = req.body;
+
+    if (!projectId) {
+      res.status(400).json({ error: 'Project ID is required' });
+      return;
+    }
+
+    // Verify project belongs to user
+    const project = await prisma.project.findFirst({
+      where: { id: projectId, userId: req.userId as string },
     });
-  } catch (error) {
+
+    if (!project) {
+      res.status(404).json({ error: 'Project not found' });
+      return;
+    }
+
+    // Upload to Gemini
+    const geminiFileUri = await uploadFileToGemini(
+      req.file.buffer,
+      req.file.originalname,
+      req.file.mimetype
+    );
+
+    // Save file metadata to database
+    const file = await prisma.file.create({
+      data: {
+        projectId,
+        filename: req.file.originalname,
+        fileUrl: geminiFileUri,
+        fileType: req.file.mimetype,
+        fileSize: req.file.size,
+        openaiFileId: geminiFileUri, // Store Gemini URI here too
+      },
+    });
+
+    res.status(201).json({
+      message: 'File uploaded successfully',
+      file,
+    });
+  } catch (error: any) {
     console.error('Upload file error:', error);
-    res.status(500).json({ error: 'Failed to upload file' });
+    res.status(500).json({ 
+      error: 'Failed to upload file',
+      details: error.message 
+    });
   }
 };
 
@@ -65,6 +108,9 @@ export const deleteFile = async (
       res.status(404).json({ error: 'File not found' });
       return;
     }
+
+    // Note: Gemini files auto-delete after 48 hours
+    // No need to manually delete from Gemini
 
     await prisma.file.delete({
       where: { id },
