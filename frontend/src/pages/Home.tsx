@@ -19,12 +19,11 @@ export const Home: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
         <div className="text-center">
           <h1 className="text-5xl md:text-6xl font-bold  mb-6">
-            Build Your AI Chatbot
-            <span className=""> Platform</span>
+            Your Intelligent AI Companion
           </h1>
           <p className="text-xl  mb-8 max-w-3xl mx-auto">
-            Create, customize, and deploy intelligent chatbots powered by Google Gemini AI.
-            No coding required.
+            Experience seamless, intelligent conversations powered by Google Gemini.
+            Login to start chatting instantly.
           </p>
           <div className="flex justify-center space-x-4">
             <button
