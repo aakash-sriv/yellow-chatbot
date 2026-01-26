@@ -72,7 +72,7 @@ export const ProjectPage: React.FC = () => {
           <FileList projectId={project.id} />
         </div>
 
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6 min-h-[600px] w-full">
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6 min-h-150 w-full">
           <div className="lg:col-span-1 rounded-xl shadow-md overflow-hidden min-w-0">
             <ChatList
               projectId={project.id}
