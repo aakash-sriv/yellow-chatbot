@@ -14,7 +14,6 @@ export const sendChatMessage = async (
   systemPrompt?: string
 ): Promise<string> => {
   try {
-    // Create model (globally switched to 2.5-flash-lite as requested)
     const model = genAI.getGenerativeModel({
       model: "gemini-2.5-flash-lite",
       ...(systemPrompt && { systemInstruction: systemPrompt }),
@@ -24,7 +23,6 @@ export const sendChatMessage = async (
     console.log("System Prompt:", systemPrompt);
     console.log("Messages count:", messages.length);
 
-    // Convert messages to Gemini format with sanitization (merge consecutive same-role messages)
     const rawHistory = messages
       .filter((m) => m.role !== "system")
       .map((m) => ({
@@ -46,12 +44,12 @@ export const sendChatMessage = async (
       }
     }
 
-    // Ensure history starts with user (Gemini requirement)
+
     const firstMsg = history[0];
     if (firstMsg && firstMsg.role === 'model') {
       history.unshift({
         role: 'user',
-        parts: [{ text: 'Please follow these instructions:' }] // Better dummy message
+        parts: [{ text: 'Please follow these instructions:' }]
       });
     }
 
@@ -86,7 +84,7 @@ export const sendChatMessage = async (
 
     return text;
   } catch (error: any) {
-    console.error("🔥 GEMINI ERROR:", error.message);
+    console.error("GEMINI ERROR:", error.message);
     console.error("Full error:", JSON.stringify(error, null, 2));
 
     // Log to file for debugging
@@ -101,17 +99,14 @@ export const sendChatMessage = async (
   }
 };
 
-/**
- * Upload file to Gemini
- * Supports: images, PDFs, audio, video
- */
+//Upload file to Gemini
+
 export const uploadFileToGemini = async (
   fileBuffer: Buffer,
   filename: string,
   mimeType: string
 ): Promise<string> => {
   try {
-    // Write buffer to temporary file path (Gemini needs file path)
     const fs = await import('fs/promises');
     const path = await import('path');
     const os = await import('os');
@@ -119,7 +114,6 @@ export const uploadFileToGemini = async (
     const tempDir = os.tmpdir();
     const tempFilePath = path.join(tempDir, `upload-${Date.now()}-${filename}`);
 
-    // Write buffer to temp file
     await fs.writeFile(tempFilePath, fileBuffer);
 
     // Upload to Gemini
